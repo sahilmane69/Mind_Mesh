@@ -1,5 +1,6 @@
 "use client";
 import { motion, useMotionValue, useTransform, useSpring } from "motion/react";
+import type { Variants } from "motion/react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ArrowRight, ChevronDown, Sparkles } from "lucide-react";
@@ -91,7 +92,7 @@ export function Hero() {
         delayChildren: 0.3,
       },
     },
-  };
+  } satisfies Variants;
 
   const letterVariants = {
     hidden: { opacity: 0, y: 50, rotateX: -90 },
@@ -105,7 +106,7 @@ export function Hero() {
         stiffness: 100,
       },
     },
-  };
+  } satisfies Variants;
 
   const title = "Connecting Curious Minds";
   const words = title.split(" ");
