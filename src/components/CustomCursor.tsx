@@ -6,34 +6,93 @@ import { motion } from "motion/react";
 export default function CustomCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [inputMode, setInputMode] = useState<"pointer" | "keyboard">("pointer");
 
   useEffect(() => {
-    const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+    const pointerFine = window.matchMedia("(pointer: fine)");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const evaluatePreferences = () => {
+      setIsEnabled(pointerFine.matches && !reducedMotion.matches);
     };
 
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.closest("a") ||
-        target.closest("button")
-      ) {
-        setIsHovering(true);
-      } else {
-        setIsHovering(false);
+    evaluatePreferences();
+
+    const handlePointerChange = () => evaluatePreferences();
+    const handleMotionChange = () => evaluatePreferences();
+
+    pointerFine.addEventListener("change", handlePointerChange);
+    reducedMotion.addEventListener("change", handleMotionChange);
+
+    return () => {
+      pointerFine.removeEventListener("change", handlePointerChange);
+      reducedMotion.removeEventListener("change", handleMotionChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Tab") {
+        setInputMode("keyboard");
       }
     };
 
-    window.addEventListener("mousemove", updateMousePosition);
-    window.addEventListener("mouseover", handleMouseOver);
+    const handlePointerDown = () => {
+      setInputMode("pointer");
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("pointerdown", handlePointerDown);
 
     return () => {
-      window.removeEventListener("mousemove", updateMousePosition);
-      window.removeEventListener("mouseover", handleMouseOver);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("pointerdown", handlePointerDown);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isEnabled || inputMode === "keyboard") {
+      return;
+    }
+
+    const updateMousePosition = (event: PointerEvent) => {
+      setMousePosition({ x: event.clientX, y: event.clientY });
+    };
+
+    const interactiveSelector = "a, button, [role='button'], input, textarea, select, [data-cursor-interactive='true']";
+
+    const handlePointerOver = (event: PointerEvent) => {
+      const target = event.target as HTMLElement | null;
+      const interactive = target?.closest(interactiveSelector);
+      setIsHovering(Boolean(interactive));
+      setInputMode("pointer");
+    };
+
+    const handlePointerOut = (event: PointerEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target) return;
+      const related = event.relatedTarget as HTMLElement | null;
+      if (related && (related === target || target.contains(related))) {
+        return;
+      }
+      setIsHovering(false);
+    };
+
+    window.addEventListener("pointermove", updateMousePosition, { passive: true });
+    window.addEventListener("pointerover", handlePointerOver);
+    window.addEventListener("pointerout", handlePointerOut);
+
+    return () => {
+      window.removeEventListener("pointermove", updateMousePosition);
+      window.removeEventListener("pointerover", handlePointerOver);
+      window.removeEventListener("pointerout", handlePointerOut);
+    };
+  }, [isEnabled, inputMode]);
+
+  if (!isEnabled || inputMode === "keyboard") {
+    return null;
+  }
 
   return (
     <>
@@ -51,6 +110,7 @@ export default function CustomCursor() {
           stiffness: 400,
           mass: 0.5,
         }}
+        aria-hidden
       />
       
       {/* Cursor ring */}
@@ -67,6 +127,7 @@ export default function CustomCursor() {
           stiffness: 200,
           mass: 0.8,
         }}
+        aria-hidden
       />
     </>
   );

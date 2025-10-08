@@ -11,8 +11,8 @@
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
+  "module": "esnext",
+  "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -29,19 +29,22 @@
         "./src/styles/*"
       ]
     },
-    "incremental": true
+    "incremental": true,
+    "types": [
+      "node",
+      "react",
+      "react-dom",
+      "@react-three/fiber"
+    ]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-  ".next/types/**/*.ts",
-  "src/types/**/*.d.ts",
-  "types/**/*.d.ts",
-  "global.d.ts"
+    ".next/types/**/*.ts",
+    "types/**/*.d.ts"
   ],
   "exclude": [
-    "node_modules",
-    "vite.config.ts"
+    "node_modules"
   ]
 }

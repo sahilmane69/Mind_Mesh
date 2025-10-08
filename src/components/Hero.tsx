@@ -1,14 +1,45 @@
 "use client";
-import { motion, useMotionValue, useTransform, useSpring } from "motion/react";
+import { motion, useTransform, useSpring } from "motion/react";
 import type { Variants } from "motion/react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ArrowRight, ChevronDown, Sparkles } from "lucide-react";
 import { Scene3D } from "./Scene3D";
 import { Suspense, useEffect, useState } from "react";
+import type { CSSProperties } from "react";
+import { pseudoRandom } from "../lib/pseudo-random";
+import { ACCENT_COLOR, PRIMARY_COLOR, TERTIARY_COLOR } from "../constants/colors";
+
+type GradientOrbProps = {
+  delay?: number;
+  x: string;
+  y: string;
+  size: string;
+  color1: string;
+  color2: string;
+};
+
+type FloatingParticleProps = {
+  delay?: number;
+  x: string;
+  y: string;
+};
+
+const PARTICLE_COUNT = 20;
+
+const FLOATING_PARTICLES: FloatingParticleProps[] = Array.from({ length: PARTICLE_COUNT }, (_, index) => {
+  const base = index + 1;
+  const toPercent = (value: number) => `${value.toFixed(2)}%`;
+
+  return {
+    delay: index * 0.2,
+    x: toPercent(pseudoRandom(base) * 100),
+    y: toPercent(50 + pseudoRandom(base + 0.5) * 50),
+  };
+});
 
 // Animated gradient orb component
-function GradientOrb({ delay = 0, x, y, size, color1, color2 }: any) {
+function GradientOrb({ delay = 0, x, y, size, color1, color2 }: GradientOrbProps) {
   return (
     <motion.div
       className="absolute rounded-full blur-3xl opacity-20"
@@ -36,11 +67,15 @@ function GradientOrb({ delay = 0, x, y, size, color1, color2 }: any) {
 }
 
 // Floating particle component
-function FloatingParticle({ delay = 0, x, y }: any) {
+function FloatingParticle({ delay = 0, x, y }: FloatingParticleProps) {
   return (
     <motion.div
-      className="absolute w-1 h-1 bg-gradient-to-r from-[#6366F1] to-[#A855F7] rounded-full"
-      style={{ left: x, top: y }}
+      className="absolute w-1 h-1 rounded-full"
+      style={{
+        left: x,
+        top: y,
+        backgroundImage: `linear-gradient(90deg, ${PRIMARY_COLOR}, ${ACCENT_COLOR})`,
+      }}
       animate={{
         y: [0, -100, 0],
         opacity: [0, 1, 0],
@@ -111,29 +146,33 @@ export function Hero() {
   const title = "Connecting Curious Minds";
   const words = title.split(" ");
 
+  const themeStyle = {
+    "--primary-color": PRIMARY_COLOR,
+    "--accent-color": ACCENT_COLOR,
+    "--tertiary-color": TERTIARY_COLOR,
+  } as CSSProperties;
+
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <section
+      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+      style={themeStyle}
+    >
       {/* Animated gradient mesh background */}
       <motion.div
         className="absolute inset-0 opacity-40"
         style={{
-          background: `radial-gradient(circle at ${gradientX}% ${gradientY}%, #6366F1 0%, transparent 50%), radial-gradient(circle at ${100 - Number(gradientX)}% ${100 - Number(gradientY)}%, #A855F7 0%, transparent 50%)`,
+          background: `radial-gradient(circle at ${gradientX}% ${gradientY}%, ${PRIMARY_COLOR} 0%, transparent 50%), radial-gradient(circle at ${100 - Number(gradientX)}% ${100 - Number(gradientY)}%, ${ACCENT_COLOR} 0%, transparent 50%)`,
         }}
       />
 
       {/* Gradient orbs */}
-      <GradientOrb delay={0} x="10%" y="20%" size="400px" color1="#6366F1" color2="transparent" />
-      <GradientOrb delay={2} x="70%" y="60%" size="500px" color1="#A855F7" color2="transparent" />
-      <GradientOrb delay={4} x="40%" y="10%" size="350px" color1="#8B5CF6" color2="transparent" />
+      <GradientOrb delay={0} x="10%" y="20%" size="400px" color1={PRIMARY_COLOR} color2="transparent" />
+      <GradientOrb delay={2} x="70%" y="60%" size="500px" color1={ACCENT_COLOR} color2="transparent" />
+      <GradientOrb delay={4} x="40%" y="10%" size="350px" color1={TERTIARY_COLOR} color2="transparent" />
 
       {/* Floating particles */}
-      {[...Array(20)].map((_, i) => (
-        <FloatingParticle
-          key={i}
-          delay={i * 0.2}
-          x={`${Math.random() * 100}%`}
-          y={`${50 + Math.random() * 50}%`}
-        />
+      {FLOATING_PARTICLES.map((particle, index) => (
+        <FloatingParticle key={index} {...particle} />
       ))}
 
       {/* 3D Background */}
@@ -147,8 +186,8 @@ export function Hero() {
       <div
         className="absolute inset-0 opacity-5"
         style={{
-          backgroundImage: `linear-gradient(to right, #6366F1 1px, transparent 1px),
-                           linear-gradient(to bottom, #6366F1 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(to right, ${PRIMARY_COLOR} 1px, transparent 1px),
+                           linear-gradient(to bottom, ${PRIMARY_COLOR} 1px, transparent 1px)`,
           backgroundSize: "60px 60px",
         }}
       />
@@ -159,9 +198,9 @@ export function Hero() {
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#6366F1]/10 to-[#A855F7]/10 border border-[#6366F1]/20 mb-8"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[var(--primary-color)]/10 to-[var(--accent-color)]/10 border border-[var(--primary-color)]/20 mb-8"
         >
-          <Sparkles className="w-4 h-4 text-[#6366F1]" />
+          <Sparkles className="w-4 h-4" style={{ color: PRIMARY_COLOR }} />
           <span className="text-sm text-muted-foreground">
             Building the future of tech together
           </span>
@@ -181,8 +220,11 @@ export function Hero() {
                   <motion.span
                     key={letterIndex}
                     variants={letterVariants}
-                    className="inline-block bg-gradient-to-r from-[#6366F1] to-[#A855F7] bg-clip-text text-transparent"
-                    style={{ perspective: "1000px" }}
+                    className="inline-block bg-clip-text text-transparent"
+                    style={{
+                      perspective: "1000px",
+                      backgroundImage: "linear-gradient(90deg, var(--primary-color), var(--accent-color))",
+                    }}
                   >
                     {letter}
                   </motion.span>
@@ -215,7 +257,7 @@ export function Hero() {
           <Button
             asChild
             size="lg"
-            className="bg-gradient-to-r from-[#6366F1] to-[#A855F7] hover:opacity-90 transition-all duration-300 rounded-full group shadow-lg shadow-[#6366F1]/25 hover:shadow-xl hover:shadow-[#6366F1]/40 hover:scale-105"
+            className="bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent-color)] hover:opacity-90 transition-all duration-300 rounded-full group shadow-lg shadow-[var(--primary-color)]/25 hover:shadow-xl hover:shadow-[var(--primary-color)]/40 hover:scale-105"
           >
             <Link href="/join">
               Join the Club
@@ -249,7 +291,7 @@ export function Hero() {
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="text-3xl md:text-4xl bg-gradient-to-r from-[#6366F1] to-[#A855F7] bg-clip-text text-transparent mb-2">
+              <div className="text-3xl md:text-4xl bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent-color)] bg-clip-text text-transparent mb-2">
                 {stat.value}
               </div>
               <div className="text-sm text-muted-foreground">{stat.label}</div>

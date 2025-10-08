@@ -1,7 +1,10 @@
-import { useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, MeshDistortMaterial, Sphere } from "@react-three/drei";
+import { useEffect, useMemo, useRef } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { MeshDistortMaterial, Sphere } from "@react-three/drei";
 import * as THREE from "three";
+
+import { ACCENT_COLOR, PRIMARY_COLOR } from "../constants/colors";
+import { pseudoRandom } from "../lib/pseudo-random";
 
 function AnimatedSphere() {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -16,7 +19,7 @@ function AnimatedSphere() {
   return (
     <Sphere ref={meshRef} args={[1, 100, 100]} scale={2}>
       <MeshDistortMaterial
-        color="#6366F1"
+        color={PRIMARY_COLOR}
         attach="material"
         distort={0.4}
         speed={1.5}
@@ -29,13 +32,15 @@ function AnimatedSphere() {
 
 function Particles() {
   const particlesRef = useRef<THREE.Points>(null);
-  
+
   const particlesCount = 1000;
-  const positions = new Float32Array(particlesCount * 3);
-  
-  for (let i = 0; i < particlesCount * 3; i++) {
-    positions[i] = (Math.random() - 0.5) * 10;
-  }
+  const positions = useMemo(() => {
+    const data = new Float32Array(particlesCount * 3);
+    for (let i = 0; i < data.length; i++) {
+      data[i] = (pseudoRandom(i + 1) - 0.5) * 10;
+    }
+    return data;
+  }, [particlesCount]);
 
   useFrame((state) => {
     if (particlesRef.current) {
@@ -55,13 +60,41 @@ function Particles() {
       </bufferGeometry>
       <pointsMaterial
         size={0.015}
-        color="#A855F7"
+        color={ACCENT_COLOR}
         transparent
         opacity={0.6}
         sizeAttenuation
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
       />
     </points>
   );
+}
+
+type AutoOrbitCameraProps = {
+  radius?: number;
+  speed?: number;
+};
+
+function AutoOrbitCamera({ radius = 5, speed = 0.1 }: AutoOrbitCameraProps) {
+  const { camera } = useThree();
+  const radiusRef = useRef(radius);
+
+  useEffect(() => {
+    radiusRef.current = Math.max(1, camera.position.length());
+    camera.lookAt(0, 0, 0);
+  }, [camera]);
+
+  useFrame(({ clock }) => {
+    const elapsed = clock.getElapsedTime() * speed;
+    const currentRadius = radiusRef.current;
+    camera.position.x = Math.cos(elapsed) * currentRadius;
+    camera.position.z = Math.sin(elapsed) * currentRadius;
+    camera.position.y = Math.sin(elapsed * 0.3) * 0.5;
+    camera.lookAt(0, 0, 0);
+  });
+
+  return null;
 }
 
 export function Scene3D() {
@@ -70,19 +103,11 @@ export function Scene3D() {
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
-        <pointLight position={[-10, -10, -5]} intensity={0.5} color="#A855F7" />
+        <pointLight position={[-10, -10, -5]} intensity={0.5} color={ACCENT_COLOR} />
         
         <AnimatedSphere />
         <Particles />
-        
-        <OrbitControls
-          enableZoom={false}
-          enablePan={false}
-          autoRotate
-          autoRotateSpeed={0.5}
-          maxPolarAngle={Math.PI / 2}
-          minPolarAngle={Math.PI / 2}
-        />
+        <AutoOrbitCamera radius={5} speed={0.1} />
       </Canvas>
     </div>
   );
