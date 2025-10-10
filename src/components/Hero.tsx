@@ -231,7 +231,9 @@ export function Hero() {
           Mind Mesh is a community for{" "}
           <span className="text-foreground font-medium">builders</span>,{" "}
           <span className="text-foreground font-medium">thinkers</span>, and{" "}
-          <span className="text-foreground font-medium">creators</span>.
+          <span className="text-foreground font-medium">creators</span>,
+          <span className="text-foreground font-medium">innovators</span>.
+
         </motion.p>
 
         {/* CTA Buttons */}
@@ -260,48 +262,8 @@ export function Hero() {
           </Button>
         </motion.div>
 
-        {/* Stats */}
-        <motion.div
-          className="grid grid-cols-3 gap-8 mt-20 max-w-2xl mx-auto"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.8, ease: "easeOut" }}
-        >
-          {[
-            { value: "500+", label: "Members" },
-            { value: "50+", label: "Projects" },
-            { value: "100+", label: "Events" },
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              className="relative"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="text-3xl md:text-4xl bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent-color)] bg-clip-text text-transparent mb-2">
-                {stat.value}
-              </div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, y: [0, 10, 0] }}
-        transition={{
-          opacity: { delay: 2, duration: 0.5 },
-          y: { repeat: Infinity, duration: 2, ease: "easeInOut" },
-        }}
-      >
-        <a href="#about" className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-          <span className="text-sm">Scroll to explore</span>
-          <ChevronDown className="w-5 h-5" />
-        </a>
-      </motion.div>
     </section>
   );
 }
+
