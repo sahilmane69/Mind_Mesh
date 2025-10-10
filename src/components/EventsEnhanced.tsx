@@ -337,7 +337,7 @@ const CalendarDay = ({ date, month, year, events, isToday, onClick }: CalendarDa
   );
 };
 
-export function Events() {
+export function EventsEnhanced() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [activeTab, setActiveTab] = useState<"list" | "calendar">("list");
