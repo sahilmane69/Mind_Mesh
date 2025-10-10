@@ -8,7 +8,7 @@ import { THEME } from "../constants/theme";
 
 export function Footer() {
   return (
-    <footer className="py-16 px-6 border-t border-border">
+    <footer className="py-16 px-6 backdrop-blur-xl bg-background/80 border-t border-border/50">
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           {/* Logo and description */}
