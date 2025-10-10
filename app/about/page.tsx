@@ -40,7 +40,7 @@ export default function AboutPage() {
           <CardHeader className="text-xl">Stay in the loop</CardHeader>
           <CardBody>
             <form className="grid md:grid-cols-[1fr_auto] gap-3">
-              <Input placeholder="email@company.com" type="email" variant="flat" />
+              <Input placeholder="teammindmesh@gmail.com" type="email" variant="flat" />
               <Button className="rounded-full" color="primary">Subscribe</Button>
             </form>
           </CardBody>
