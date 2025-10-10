@@ -7,7 +7,6 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import CustomCursor from "@/components/CustomCursor";
 import { Header } from "@/components/Header";
 
 const joinSchema = z.object({
@@ -44,7 +43,6 @@ export default function JoinPage() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <CustomCursor />
       <Header />
       <div className="w-full max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-24">
         {/* Logo/Brand Section */}
