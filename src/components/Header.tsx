@@ -64,18 +64,13 @@ export function Header() {
         </div>
         
         <nav className="hidden md:flex items-center gap-8">
-          <a href="#about" className="text-muted-foreground hover:text-foreground transition-colors">
-            About
-          </a>
-          <a href="#projects" className="text-muted-foreground hover:text-foreground transition-colors">
-            Projects
-          </a>
-          <a href="#events" className="text-muted-foreground hover:text-foreground transition-colors">
-            Events
-          </a>
-          <a href="#team" className="text-muted-foreground hover:text-foreground transition-colors">
-            Team
-          </a>
+          <Link prefetch href="/" className="text-muted-foreground hover:text-foreground transition-colors">Home</Link>
+          <Link prefetch href="/about" className="text-muted-foreground hover:text-foreground transition-colors">About</Link>
+          <Link prefetch href="/projects" className="text-muted-foreground hover:text-foreground transition-colors">Projects</Link>
+          <Link prefetch href="/events" className="text-muted-foreground hover:text-foreground transition-colors">Events</Link>
+          <Link prefetch href="/team" className="text-muted-foreground hover:text-foreground transition-colors">Team</Link>
+          <Link prefetch href="/case-studies" className="text-muted-foreground hover:text-foreground transition-colors">Case Studies</Link>
+          <Link prefetch href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
         </nav>
 
         <div className="flex items-center gap-3">

@@ -4,18 +4,14 @@ import { useEffect } from "react";
 import CustomCursor from "@/components/CustomCursor";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { About } from "@/components/About";
-import { Projects } from "@/components/Projects";
-import { Events } from "@/components/Events";
-import { Team } from "@/components/Team";
 import { Footer } from "@/components/Footer";
+import PartnerMarquee from "@/components/PartnerMarquee";
 
 export default function Page() {
   useEffect(() => {
-    document.documentElement.style.scrollBehavior = "smooth";
-    return () => {
-      document.documentElement.style.scrollBehavior = "auto";
-    };
+    // Remove global smooth scroll to keep navigation snappy
+    document.documentElement.style.scrollBehavior = "auto";
+    return () => {};
   }, []);
 
   return (
@@ -23,10 +19,7 @@ export default function Page() {
       <CustomCursor />
       <Header />
       <Hero />
-      <About />
-      <Projects />
-      <Events />
-      <Team />
+     
       <Footer />
     </div>
   );

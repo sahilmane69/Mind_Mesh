@@ -13,7 +13,8 @@
 }
 
 html { font-size: var(--font-size); }
-body { font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; cursor: none; }
+body { font-family: 'Corben', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; cursor: none; }
+h1, h2, h3, h4, h5, h6 { font-family: 'Corben', serif; }
 * { cursor: none !important; }
 
 
