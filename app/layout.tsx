@@ -9,7 +9,6 @@ import './globals.css';
 import '../src/index.css';
 import type { ReactNode } from 'react';
 import Providers from './providers';
-
 // We will mount three.js only on interior pages, not on hero/home (moved into pages)
 
 export default function RootLayout({ children }: { children: ReactNode }) {
