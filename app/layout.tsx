@@ -3,6 +3,8 @@ export const metadata = {
   description: 'A community for builders, thinkers, and creators at the intersection of technology and innovation.',
 };
 
+export const dynamic = 'force-dynamic';
+
 import './globals.css';
 import '../src/index.css';
 import type { ReactNode } from 'react';
