@@ -2,7 +2,9 @@
 import { Github, Linkedin, Twitter, Instagram, Mail } from "lucide-react";
 import { Separator } from "./ui/separator";
 import Image from "next/image";
-import logoImage from "../assets/0a260f5fc4d40a3b60d47cc515767be10522d037.png";
+import logoImage from "../assets/logo.png";
+import { SOCIAL_LINKS } from "../constants/links";
+import { THEME } from "../constants/theme";
 
 export function Footer() {
   return (
@@ -54,32 +56,45 @@ export function Footer() {
             <h4 className="mb-4">Connect With Us</h4>
             <div className="flex gap-3 mb-6">
               <a
-                href="#"
+                href={SOCIAL_LINKS.github}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 rounded-full bg-muted hover:bg-gradient-to-r hover:from-[#6366F1] hover:to-[#A855F7] hover:text-white transition-all"
+                aria-label="Follow us on GitHub"
               >
                 <Github className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href={SOCIAL_LINKS.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 rounded-full bg-muted hover:bg-gradient-to-r hover:from-[#6366F1] hover:to-[#A855F7] hover:text-white transition-all"
+                aria-label="Connect on LinkedIn"
               >
                 <Linkedin className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href={SOCIAL_LINKS.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 rounded-full bg-muted hover:bg-gradient-to-r hover:from-[#6366F1] hover:to-[#A855F7] hover:text-white transition-all"
+                aria-label="Follow us on Twitter"
               >
                 <Twitter className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href={SOCIAL_LINKS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 rounded-full bg-muted hover:bg-gradient-to-r hover:from-[#6366F1] hover:to-[#A855F7] hover:text-white transition-all"
+                aria-label="Follow us on Instagram"
               >
                 <Instagram className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href={SOCIAL_LINKS.email}
                 className="p-2 rounded-full bg-muted hover:bg-gradient-to-r hover:from-[#6366F1] hover:to-[#A855F7] hover:text-white transition-all"
+                aria-label="Email us"
               >
                 <Mail className="w-5 h-5" />
               </a>

@@ -3,7 +3,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 
-import { ACCENT_COLOR, PRIMARY_COLOR, TERTIARY_COLOR } from "../constants/colors";
+import { THEME } from "../constants/theme";
 
 type FloatingCardProps = {
   position: [number, number, number];
@@ -46,11 +46,11 @@ export function FloatingCards3D() {
       <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
-        <pointLight position={[-10, -10, -5]} intensity={0.3} color={ACCENT_COLOR} />
+        <pointLight position={[-10, -10, -5]} intensity={0.3} color={THEME.colors.accent} />
 
-        <FloatingCard position={[-2, 0, 0]} color={PRIMARY_COLOR} />
-        <FloatingCard position={[0, 0, -1]} color={TERTIARY_COLOR} />
-        <FloatingCard position={[2, 0, 0]} color={ACCENT_COLOR} />
+        <FloatingCard position={[-2, 0, 0]} color={THEME.colors.primary} />
+        <FloatingCard position={[0, 0, -1]} color={THEME.colors.tertiary} />
+        <FloatingCard position={[2, 0, 0]} color={THEME.colors.accent} />
       </Canvas>
     </div>
   );

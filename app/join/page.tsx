@@ -1,14 +1,46 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import CustomCursor from "@/components/CustomCursor";
 import { Header } from "@/components/Header";
 
+const joinSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().optional(),
+  interest: z.string().min(10, "Please describe your interests (minimum 10 characters)"),
+});
+
+type JoinFormData = z.infer<typeof joinSchema>;
+
 export default function JoinPage() {
   const [submitted, setSubmitted] = useState(false);
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<JoinFormData>({
+    resolver: zodResolver(joinSchema),
+  });
+
+  const onSubmit = async (data: JoinFormData) => {
+    try {
+      // TODO: Send data to backend API
+      console.log("Form data:", data);
+      setSubmitted(true);
+      reset();
+    } catch (error) {
+      console.error("Submission error:", error);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -58,24 +90,20 @@ export default function JoinPage() {
                 </p>
               </div>
 
-              <form
-                className="space-y-5"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSubmitted(true);
-                }}
-              >
+              <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-sm font-medium">
                     Full Name
                   </Label>
                   <Input 
+                    {...register("name")}
                     id="name" 
-                    name="name" 
                     placeholder="John Doe" 
-                    required 
                     className="h-11"
                   />
+                  {errors.name && (
+                    <p className="text-sm text-red-500">{errors.name.message}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -83,13 +111,15 @@ export default function JoinPage() {
                     Email Address
                   </Label>
                   <Input 
+                    {...register("email")}
                     id="email" 
-                    name="email" 
                     type="email" 
                     placeholder="john@example.com" 
-                    required 
                     className="h-11"
                   />
+                  {errors.email && (
+                    <p className="text-sm text-red-500">{errors.email.message}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -97,8 +127,8 @@ export default function JoinPage() {
                     Phone Number <span className="text-muted-foreground font-normal">(Optional)</span>
                   </Label>
                   <Input 
+                    {...register("phone")}
                     id="phone" 
-                    name="phone" 
                     type="tel" 
                     placeholder="+1 (555) 000-0000" 
                     className="h-11"
@@ -110,19 +140,22 @@ export default function JoinPage() {
                     Areas of Interest
                   </Label>
                   <Input 
+                    {...register("interest")}
                     id="interest" 
-                    name="interest" 
                     placeholder="AI, Web Development, Robotics..." 
-                    required
                     className="h-11"
                   />
+                  {errors.interest && (
+                    <p className="text-sm text-red-500">{errors.interest.message}</p>
+                  )}
                 </div>
 
                 <Button 
                   type="submit" 
-                  className="w-full h-11 bg-gradient-to-r from-[#6366F1] to-[#A855F7] hover:from-[#5558E3] hover:to-[#9333EA] text-white font-medium shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30 transition-all"
+                  disabled={isSubmitting}
+                  className="w-full h-11 bg-gradient-to-r from-[#6366F1] to-[#A855F7] hover:from-[#5558E3] hover:to-[#9333EA] text-white font-medium shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30 transition-all disabled:opacity-50"
                 >
-                  Submit Application
+                  {isSubmitting ? "Submitting..." : "Submit Application"}
                 </Button>
 
                 <p className="text-xs text-center text-muted-foreground pt-2">

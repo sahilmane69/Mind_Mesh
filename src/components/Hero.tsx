@@ -7,8 +7,8 @@ import { ArrowRight, ChevronDown, Sparkles } from "lucide-react";
 import { Scene3D } from "./Scene3D";
 import { Suspense, useEffect, useState } from "react";
 import type { CSSProperties } from "react";
-import { pseudoRandom } from "../lib/pseudo-random";
-import { ACCENT_COLOR, PRIMARY_COLOR, TERTIARY_COLOR } from "../constants/colors";
+import { THEME } from "../constants/theme";
+import { PARTICLE_POSITIONS } from "../constants/particles";
 
 type GradientOrbProps = {
   delay?: number;
@@ -24,19 +24,6 @@ type FloatingParticleProps = {
   x: string;
   y: string;
 };
-
-const PARTICLE_COUNT = 20;
-
-const FLOATING_PARTICLES: FloatingParticleProps[] = Array.from({ length: PARTICLE_COUNT }, (_, index) => {
-  const base = index + 1;
-  const toPercent = (value: number) => `${value.toFixed(2)}%`;
-
-  return {
-    delay: index * 0.2,
-    x: toPercent(pseudoRandom(base) * 100),
-    y: toPercent(50 + pseudoRandom(base + 0.5) * 50),
-  };
-});
 
 // Animated gradient orb component
 function GradientOrb({ delay = 0, x, y, size, color1, color2 }: GradientOrbProps) {
@@ -74,7 +61,7 @@ function FloatingParticle({ delay = 0, x, y }: FloatingParticleProps) {
       style={{
         left: x,
         top: y,
-        backgroundImage: `linear-gradient(90deg, ${PRIMARY_COLOR}, ${ACCENT_COLOR})`,
+        backgroundImage: `linear-gradient(90deg, ${THEME.colors.primary}, ${THEME.colors.accent})`,
       }}
       animate={{
         y: [0, -100, 0],
@@ -147,9 +134,9 @@ export function Hero() {
   const words = title.split(" ");
 
   const themeStyle = {
-    "--primary-color": PRIMARY_COLOR,
-    "--accent-color": ACCENT_COLOR,
-    "--tertiary-color": TERTIARY_COLOR,
+    "--primary-color": THEME.colors.primary,
+    "--accent-color": THEME.colors.accent,
+    "--tertiary-color": THEME.colors.tertiary,
   } as CSSProperties;
 
   return (
@@ -161,18 +148,18 @@ export function Hero() {
       <motion.div
         className="absolute inset-0 opacity-40"
         style={{
-          background: `radial-gradient(circle at ${gradientX}% ${gradientY}%, ${PRIMARY_COLOR} 0%, transparent 50%), radial-gradient(circle at ${100 - Number(gradientX)}% ${100 - Number(gradientY)}%, ${ACCENT_COLOR} 0%, transparent 50%)`,
+          background: `radial-gradient(circle at ${gradientX}% ${gradientY}%, ${THEME.colors.primary} 0%, transparent 50%), radial-gradient(circle at ${100 - Number(gradientX)}% ${100 - Number(gradientY)}%, ${THEME.colors.accent} 0%, transparent 50%)`,
         }}
       />
 
       {/* Gradient orbs */}
-      <GradientOrb delay={0} x="10%" y="20%" size="400px" color1={PRIMARY_COLOR} color2="transparent" />
-      <GradientOrb delay={2} x="70%" y="60%" size="500px" color1={ACCENT_COLOR} color2="transparent" />
-      <GradientOrb delay={4} x="40%" y="10%" size="350px" color1={TERTIARY_COLOR} color2="transparent" />
+      <GradientOrb delay={0} x="10%" y="20%" size="400px" color1={THEME.colors.primary} color2="transparent" />
+      <GradientOrb delay={2} x="70%" y="60%" size="500px" color1={THEME.colors.accent} color2="transparent" />
+      <GradientOrb delay={4} x="40%" y="10%" size="350px" color1={THEME.colors.tertiary} color2="transparent" />
 
       {/* Floating particles */}
-      {FLOATING_PARTICLES.map((particle, index) => (
-        <FloatingParticle key={index} {...particle} />
+      {PARTICLE_POSITIONS.map((particle) => (
+        <FloatingParticle key={particle.id} delay={particle.delay} x={particle.x} y={particle.y} />
       ))}
 
       {/* 3D Background */}
@@ -186,8 +173,8 @@ export function Hero() {
       <div
         className="absolute inset-0 opacity-5"
         style={{
-          backgroundImage: `linear-gradient(to right, ${PRIMARY_COLOR} 1px, transparent 1px),
-                           linear-gradient(to bottom, ${PRIMARY_COLOR} 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(to right, ${THEME.colors.primary} 1px, transparent 1px),
+                           linear-gradient(to bottom, ${THEME.colors.primary} 1px, transparent 1px)`,
           backgroundSize: "60px 60px",
         }}
       />
@@ -200,7 +187,7 @@ export function Hero() {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[var(--primary-color)]/10 to-[var(--accent-color)]/10 border border-[var(--primary-color)]/20 mb-8"
         >
-          <Sparkles className="w-4 h-4" style={{ color: PRIMARY_COLOR }} />
+          <Sparkles className="w-4 h-4" style={{ color: THEME.colors.primary }} />
           <span className="text-sm text-muted-foreground">
             Building the future of tech together
           </span>

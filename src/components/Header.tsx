@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
-import logoImage from "../assets/0a260f5fc4d40a3b60d47cc515767be10522d037.png";
+import logoImage from "../assets/logo.png";
 import {
   Dialog,
   DialogContent,
@@ -64,13 +64,12 @@ export function Header() {
         </div>
         
         <nav className="hidden md:flex items-center gap-8">
-          <Link prefetch href="/" className="text-muted-foreground hover:text-foreground transition-colors">Home</Link>
-          <Link prefetch href="/about" className="text-muted-foreground hover:text-foreground transition-colors">About</Link>
-          <Link prefetch href="/projects" className="text-muted-foreground hover:text-foreground transition-colors">Projects</Link>
-          <Link prefetch href="/events" className="text-muted-foreground hover:text-foreground transition-colors">Events</Link>
-          <Link prefetch href="/team" className="text-muted-foreground hover:text-foreground transition-colors">Team</Link>
-          <Link prefetch href="/case-studies" className="text-muted-foreground hover:text-foreground transition-colors">Case Studies</Link>
-          <Link prefetch href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
+          <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">Home</Link>
+          <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">About</Link>
+          <Link href="/projects" className="text-muted-foreground hover:text-foreground transition-colors">Projects</Link>
+          <Link href="/events" className="text-muted-foreground hover:text-foreground transition-colors">Events</Link>
+          <Link href="/team" className="text-muted-foreground hover:text-foreground transition-colors">Team</Link>
+          <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
         </nav>
 
         <div className="flex items-center gap-3">

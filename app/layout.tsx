@@ -6,10 +6,14 @@ export const metadata = {
 import './globals.css';
 import '../src/index.css';
 import type { ReactNode } from 'react';
-import GlobalBackground from "@/components/GlobalBackground";
 import { HeroUIProvider } from "@heroui/react";
 import dynamic from "next/dynamic";
 import CustomCursor from "@/components/CustomCursor";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+
+const GlobalBackground = dynamic(() => import("@/components/GlobalBackground"), {
+  ssr: false,
+});
 
 // We will mount three.js only on interior pages, not on hero/home (moved into pages)
 
@@ -22,11 +26,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link href="https://fonts.googleapis.com/css2?family=Corben:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <HeroUIProvider>
-          <CustomCursor />
-          <GlobalBackground />
-          {children}
-        </HeroUIProvider>
+        <ErrorBoundary>
+          <HeroUIProvider>
+            <CustomCursor />
+            <GlobalBackground />
+            {children}
+          </HeroUIProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

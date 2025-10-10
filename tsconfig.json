@@ -27,6 +27,21 @@
       ],
       "@/styles/*": [
         "./src/styles/*"
+      ],
+      "@/constants/*": [
+        "./src/constants/*"
+      ],
+      "@/lib/*": [
+        "./src/lib/*"
+      ],
+      "@/config/*": [
+        "./src/config/*"
+      ],
+      "@/types/*": [
+        "./types/*"
+      ],
+      "@/app/*": [
+        "./app/*"
       ]
     },
     "incremental": true,

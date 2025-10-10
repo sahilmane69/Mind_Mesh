@@ -3,8 +3,8 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { MeshDistortMaterial, Sphere } from "@react-three/drei";
 import * as THREE from "three";
 
-import { ACCENT_COLOR, PRIMARY_COLOR } from "../constants/colors";
-import { pseudoRandom } from "../lib/pseudo-random";
+import { THEME } from "../constants/theme";
+import { generateParticlePositions3D } from "../constants/particles";
 
 function AnimatedSphere() {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -17,9 +17,9 @@ function AnimatedSphere() {
   });
 
   return (
-    <Sphere ref={meshRef} args={[1, 100, 100]} scale={2}>
+    <Sphere ref={meshRef} args={[1, 64, 64]} scale={2}>
       <MeshDistortMaterial
-        color={PRIMARY_COLOR}
+        color={THEME.colors.primary}
         attach="material"
         distort={0.4}
         speed={1.5}
@@ -33,14 +33,9 @@ function AnimatedSphere() {
 function Particles() {
   const particlesRef = useRef<THREE.Points>(null);
 
-  const particlesCount = 1000;
   const positions = useMemo(() => {
-    const data = new Float32Array(particlesCount * 3);
-    for (let i = 0; i < data.length; i++) {
-      data[i] = (pseudoRandom(i + 1) - 0.5) * 10;
-    }
-    return data;
-  }, [particlesCount]);
+    return generateParticlePositions3D(5000);
+  }, []);
 
   useFrame((state) => {
     if (particlesRef.current) {
@@ -53,16 +48,16 @@ function Particles() {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={particlesCount}
+          count={positions.length / 3}
           array={positions}
           itemSize={3}
         />
       </bufferGeometry>
       <pointsMaterial
         size={0.015}
-        color={ACCENT_COLOR}
+        color={THEME.colors.primary}
         transparent
-        opacity={0.6}
+        opacity={0.8}
         sizeAttenuation
         depthWrite={false}
         blending={THREE.AdditiveBlending}
@@ -103,7 +98,7 @@ export function Scene3D() {
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
-        <pointLight position={[-10, -10, -5]} intensity={0.5} color={ACCENT_COLOR} />
+        <pointLight position={[-10, -10, -5]} intensity={0.5} color={THEME.colors.accent} />
         
         <AnimatedSphere />
         <Particles />

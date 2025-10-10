@@ -1,4 +1,4 @@
-import type { ThreeElements } from '@react-three/fiber/three-types';
+import { ThreeElements } from '@react-three/fiber'
 
 declare global {
   namespace JSX {
@@ -6,4 +6,4 @@ declare global {
   }
 }
 
-export {};
+export {}
