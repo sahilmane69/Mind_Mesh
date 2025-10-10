@@ -7,13 +7,8 @@ import './globals.css';
 import '../src/index.css';
 import type { ReactNode } from 'react';
 import { HeroUIProvider } from "@heroui/react";
-import dynamic from "next/dynamic";
 import CustomCursor from "@/components/CustomCursor";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-
-const GlobalBackground = dynamic(() => import("@/components/GlobalBackground"), {
-  ssr: false,
-});
 
 // We will mount three.js only on interior pages, not on hero/home (moved into pages)
 
@@ -29,7 +24,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ErrorBoundary>
           <HeroUIProvider>
             <CustomCursor />
-            <GlobalBackground />
             {children}
           </HeroUIProvider>
         </ErrorBoundary>
