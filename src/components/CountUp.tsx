@@ -17,7 +17,7 @@ type CountUpProps = {
   className?: string;
   style?: CSSProperties;
   once?: boolean;
-  animationTriggerMargin?: string;
+  animationTriggerMargin?: number | string;
   children?: (props: { countUpRef: React.RefObject<HTMLSpanElement> }) => React.ReactNode;
   onStart?: () => void;
   onEnd?: () => void;
@@ -78,7 +78,12 @@ export function CountUp({
   const [isAnimating, setIsAnimating] = useState(false);
   const componentRef = useRef<HTMLDivElement>(null);
   const countUpRef = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(componentRef, { once, margin: animationTriggerMargin });
+  const isInView = useInView(componentRef, { 
+    once, 
+    margin: (typeof animationTriggerMargin === "string" 
+      ? animationTriggerMargin 
+      : `${animationTriggerMargin}px`) as any // Cast to expected type
+  });
   const frameRef = useRef(0);
   const startTimeRef = useRef(0);
   

@@ -8,7 +8,6 @@ import { Footer } from "@/components/Footer";
 import { Projects } from "@/components/Projects";
 import { Team } from "@/components/Team";
 import { CountUp, StatsGroup } from "@/components/CountUp";
-import { Testimonials } from "@/components/Testimonials";
 import { About } from "@/components/About";
 import { Events } from "@/components/Events";
 import { Button } from "@/components/ui/button";
@@ -57,11 +56,7 @@ export default function Page() {
         </div>
       </section>
       
-      <section className="py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <Testimonials />
-        </div>
-      </section>
+      {/* Testimonials section removed */}
       
       <section id="team" className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
@@ -78,7 +73,7 @@ export default function Page() {
           <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
             Become part of our innovative community and collaborate with like-minded creators, builders, and thinkers.
           </p>
-          <Link href="/join/page-enhanced" passHref>
+          <Link href="/join" passHref>
             <Button 
               className="bg-gradient-to-r from-[#6366F1] to-[#A855F7] hover:from-[#5558E3] hover:to-[#9333EA] text-white px-8 py-6 text-lg h-auto"
             >
